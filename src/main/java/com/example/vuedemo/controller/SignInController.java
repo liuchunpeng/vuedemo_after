@@ -8,10 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -24,16 +21,15 @@ public class SignInController {
     private UserDaoService userDaoService;
 
     @PostMapping("/signIn")
-    public Map signIn(Map<String,Object> params){
-        Map<String,String> result =new HashMap<String, String>();
-        String username =(String) params.get("username");
-        String password =(String) params.get("password");
-        User user = userDaoService.findByUserName(username);
-        if (!ObjectUtils.isEmpty(user) && !StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)){
-            if (username.equals(user.getUserName()) && password.equals(user.getPassWord())){
+    public Map signIn(@RequestBody User user){
+        Map<String,Object> result =new HashMap<String, Object>();
+
+        User res = userDaoService.findByUserName(user.getUserName());
+        if (!ObjectUtils.isEmpty(res) && !StringUtils.isEmpty(user.getUserName()) && !StringUtils.isEmpty(user.getPassWord())){
+            if (user.getUserName().equals(user.getUserName()) && user.getPassWord().equals(user.getPassWord())){
 
                 result.put("code","0");
-                result.put("data",username);
+                result.put("data",res);
                 return result;
             }
         }
